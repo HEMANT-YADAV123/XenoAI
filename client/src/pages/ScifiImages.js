@@ -31,7 +31,7 @@ const ScifiImages = () => {
       const { data } = await axios.post("/api/v1/hugging/scifi-image",{text});
       console.log(data);
       if (data.success) {
-        setImage(data.summary || "No summary generated.");
+        setImage(data.image || "No summary generated.");
       } else {
         setError(data.message || "Error generating summary.");
       }
@@ -56,7 +56,7 @@ const ScifiImages = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      <Collapse in={error}>
+      <Collapse in={Boolean(error)}>
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
         </Alert>
@@ -104,7 +104,14 @@ const ScifiImages = () => {
           }}
         >
           <Box sx={{display:'flex', justifyContent:'centre',my:5}}>
-            <img src={image} alt="scifi-image" /> 
+            <img src={image} alt="scifi-image"
+            style={{
+              maxHeight: "100%",
+              maxWidth: "100%",
+              objectFit: "contain",
+              borderRadius: "5px",
+            }}
+             /> 
             </Box>
         </Card>
       ) : (
@@ -128,7 +135,7 @@ const ScifiImages = () => {
               lineHeight: "450px",
             }}
           >
-            Your image will Appear here.
+            Your image will appear here.
           </Typography>
         </Card>
       )}

@@ -460,13 +460,14 @@ exports.scifiImageController = async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`, // Replace with your API key
         },
+        responseType: 'arraybuffer',  // Handle binary response
       }
     );
 
      // Log the API response for debugging
     console.log("Hugging Face API Response:", response.data);
     
-    const imageBase64 = response.data?.images?.[0];
+    const imageBase64 = Buffer.from(response.data, 'binary').toString('base64');
 
     if (imageBase64) {
       return res.status(200).json({
