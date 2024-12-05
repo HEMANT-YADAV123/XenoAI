@@ -94,7 +94,7 @@ const ScifiImages = () => {
       {image ? (
         <Card
           sx={{
-            mt: 4,
+            
             border: 1,
             boxShadow: 0,
             height: "500px",
@@ -103,16 +103,18 @@ const ScifiImages = () => {
             bgcolor: "background.default",
           }}
         >
-          <Box sx={{display:'flex', justifyContent:'centre',my:5}}>
-            <img src={image} alt="scifi-image"
-            style={{
-              maxHeight: "100%",
-              maxWidth: "100%",
-              objectFit: "contain",
-              borderRadius: "5px",
-            }}
-             /> 
-            </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <img
+              src={image}
+              alt="scifi-image"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '5px',
+              }}
+            />
+          </Box>
         </Card>
       ) : (
         <Card
