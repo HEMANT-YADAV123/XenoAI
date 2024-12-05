@@ -1,0 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  font-family: 'roboto',sans-serif;
+}
+
+a{
+  color: grey!important ;
+  text-decoration: none !important;
+  padding: 20px;
+  margin-top: 20px;
+}
+a:hover{
+  color: black !important;
+}
