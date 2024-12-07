@@ -12,6 +12,7 @@ import {
   Alert,
   Collapse,
   Card,
+  CircularProgress,
 } from "@mui/material";
 
 const JsConverter = () => {
@@ -23,10 +24,12 @@ const JsConverter = () => {
   const [text, settext] = useState("");
   const [code, setcode] = useState("");
   const [error, setError] = useState("");
+  const [loading,setLoading] = useState(false)//loading state.
 
   // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
     try {
       // Send the English text to the backend API for conversion to JS code
       const { data } = await axios.post("/api/v1/hugging/js-converter", { text });
@@ -52,6 +55,9 @@ const JsConverter = () => {
       setTimeout(() => {
         setError("");
       }, 5000);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -94,8 +100,10 @@ const JsConverter = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
+          disabled={loading} // Disable button while loading
         >
-          Convert
+          { loading ? <CircularProgress size={24} sx={{ color: "white" }}/> : "Convert"}
+          
         </Button>
         <Typography mt={2}>
           Not this tool? <Link to="/">Go Back</Link>
@@ -103,7 +111,26 @@ const JsConverter = () => {
       </form>
 
       {/* Display the generated JavaScript code */}
-      {code ? (
+      { loading ?
+        <Card
+        sx={{
+          mt: 4,
+          border: 1,
+          boxShadow: 0,
+          height: "500px",
+          overflowY: "auto",
+          borderRadius: 5,
+          borderColor: "natural.medium",
+          bgcolor: "background.default",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      > 
+        <CircularProgress/>
+      </Card>
+      
+      : code ? (
         <Card
           sx={{
             mt: 4,

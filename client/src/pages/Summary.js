@@ -12,6 +12,7 @@ import {
   Alert,
   Collapse,
   Card,
+  CircularProgress,
 } from "@mui/material";
 
 const Summary = () => {
@@ -23,10 +24,11 @@ const Summary = () => {
   const [text, settext] = useState("");
   const [summary, setSummary] = useState("");
   const [error, setError] = useState("");
-
+  const [loading,setLoading] = useState(false);
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await axios.post("/api/v1/hugging/summary",{text});
       console.log(data);
@@ -45,6 +47,9 @@ const Summary = () => {
       setTimeout(() => {
         setError("");
       }, 5000);
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -83,15 +88,33 @@ const Summary = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
+          disabled={loading}//disable button while loading
         >
-          Submit
+          {loading ? <CircularProgress size={24} sx={{color: "white"}} /> : "Submit"}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {summary ? (
+      {loading ?
+        <Card
+        sx={{
+          mt: 4,
+          border: 1,
+          boxShadow: 0,
+          height: "500px",
+          borderRadius: 5,
+          borderColor: "natural.medium",
+          bgcolor: "background.default",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <CircularProgress/>
+      </Card>
+      : summary ? (
         <Card
           sx={{
             mt: 4,

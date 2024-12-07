@@ -12,6 +12,7 @@ import {
   Alert,
   Collapse,
   Card,
+  CircularProgress, // Import CircularProgress
 } from "@mui/material";
 
 const ChatBot = () => {
@@ -24,10 +25,12 @@ const ChatBot = () => {
   const [style, setStyle] = useState("yoda"); // Default chatbot style
   const [response, setresponse] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state
 
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
     try {
       const { data } = await axios.post("/api/v1/hugging/chatbot",{text , style});
       console.log(data);
@@ -46,6 +49,9 @@ const ChatBot = () => {
       setTimeout(() => {
         setError("");
       }, 5000);
+    }
+    finally {
+      setLoading(false); // Set loading to false
     }
   };
   return (
@@ -98,15 +104,34 @@ const ChatBot = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
+          disabled={loading} // Disable button while loading
         >
-          Get Response
+           {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Get Response"}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {response ? (
+      {loading ? (
+        <Card
+          sx={{
+            mt: 4,
+            border: 1,
+            boxShadow: 0,
+            height: "500px",
+            borderRadius: 5,
+            borderColor: "natural.medium",
+            bgcolor: "background.default",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Card>
+      )
+      : response ? (
         <Card
           sx={{
             mt: 4,

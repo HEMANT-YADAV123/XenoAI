@@ -12,6 +12,7 @@ import {
   Alert,
   Collapse,
   Card,
+  CircularProgress,
 } from "@mui/material";
 
 const ScifiImages = () => {
@@ -23,10 +24,12 @@ const ScifiImages = () => {
   const [text, settext] = useState("");
   const [image, setImage] = useState("");
   const [error, setError] = useState("");
+  const [loading,setLoading] = useState(false);
 
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await axios.post("/api/v1/hugging/scifi-image",{text});
       console.log(data);
@@ -45,6 +48,9 @@ const ScifiImages = () => {
       setTimeout(() => {
         setError("");
       }, 5000);
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -83,15 +89,34 @@ const ScifiImages = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
+          disabled={loading}
         >
-          Generate
+          {loading ? <CircularProgress size={24} sx={{color:"white"}}/> : "Generate"}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {image ? (
+      {loading ?
+      <Card
+      sx={{
+        mt: 4,
+        border: 1,
+        boxShadow: 0,
+        height: "500px",
+        borderRadius: 5,
+        borderColor: "natural.medium",
+        bgcolor: "background.default",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
+      <CircularProgress/>
+    </Card>
+    :
+     image ? (
         <Card
           sx={{
             
