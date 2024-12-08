@@ -6,7 +6,7 @@ const colors = require('colors');
 const dotenv = require('dotenv'); 
 const connecttoDb = require('./config/db');
 const errorHandler = require('./middlewares/errorMiddleware');
-
+const authMiddleware = require('./middlewares/authMiddleware');
 
 //routes
 const authroutes = require('./routes/authRoutes');
@@ -31,12 +31,11 @@ app.use(express.json());//a middleware in Express that helps your app understand
 app.use(bodyParser.urlencoded({extended:false})) //It helps your Express app read data sent from an HTML form (like a login form) so you can easily access it in your code.
 app.use(morgan('dev'))// This tool logs requests to the console so you can see what’s happening on your server.
 app.use(errorHandler);//to handle error and send response message and status code.
-
 const PORT = process.env.PORT || 8081
 
 //API routes.
 app.use('/api/v1/auth',authroutes);
-app.use("/api/v1/hugging",openaiRoutes);
+app.use("/api/v1/hugging", authMiddleware.protect, openaiRoutes);
 
 
 app.listen(PORT,()=>{

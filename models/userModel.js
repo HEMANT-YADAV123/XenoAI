@@ -82,7 +82,7 @@ userSchema.methods.matchPassword = async function(password) {
 
 
 //SIGN TOKEN
-userSchema.methods.getSignedToken = async function(res) {
+userSchema.methods.getSignedToken = function(res) {
 
     //generating access token.
     const accessToken = JWT.sign(//JWT.sign() is used to create a signed JWT token.
@@ -104,6 +104,8 @@ userSchema.methods.getSignedToken = async function(res) {
         httpOnly:true//only accessible through http only through js.
     }
     );
+    return accessToken;
+    
 }
 
 

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import {useNavigate} from 'react-router-dom';
 const Navbar = () => {
     const theme = useTheme();
-    const loggedIn = JSON.parse(localStorage.getItem("authToken"));//if authToken is present means we have loogin.
+    const loggedIn = localStorage.getItem("authToken");//if authToken is present means we have login.
     const navigate = useNavigate();
     //handle logout.
     const handleLogout = async()=>{

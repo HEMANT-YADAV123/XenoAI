@@ -42,8 +42,9 @@ exports.registerController = async (req,res,next) => {
 exports.loginController = async (req,res,next) => {
     try {
         const {email,password} = req.body;
-        console.log('Email:', email);
-        console.log('Password:', password);
+        // console.log('Email:', email);
+        // console.log('Password:', password)
+        ;
         //validation
         if(!email || !password)
         {

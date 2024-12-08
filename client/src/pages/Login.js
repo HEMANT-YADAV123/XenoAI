@@ -20,10 +20,10 @@ const Login = () => {
   const handleSubmit = async(e)=>{
       e.preventDefault();
       try {
-        await axios.post('/api/v1/auth/login',{email,password});
-        
+        const response = await axios.post('/api/v1/auth/login', { email, password });
+        const token = response.data.token;
         toast.success('Login Successfully');
-        localStorage.setItem("authToken",true)
+        localStorage.setItem("authToken",token)
         //then we naviagte user to login page.
         navigate('/');
       } catch (err) {

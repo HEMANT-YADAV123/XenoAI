@@ -6,6 +6,7 @@ import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
 import {Toaster} from 'react-hot-toast';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute'; 
 import Homepage from './pages/Homepage';
 import Register from './pages/Register';
 import Login from './pages/Login';
@@ -30,11 +31,12 @@ function App() {
           <Route path="/" element={<Homepage/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/summary" element={<Summary/>} />
-          <Route path="/text-generation" element={<Paragraph/>} />
-          <Route path="/chatbot" element={<ChatBot/>} />
-          <Route path="/js-converter" element={<JsConverter/>} />
-          <Route path="/scifi-image" element={<ScifiImages />} />
+          {/* Protected Routes */}
+        <Route path="/summary" element={<PrivateRoute element={<Summary />} />} />
+        <Route path="/text-generation" element={<PrivateRoute element={<Paragraph />} />} />
+        <Route path="/chatbot" element={<PrivateRoute element={<ChatBot />} />} />
+        <Route path="/js-converter" element={<PrivateRoute element={<JsConverter />} />} />
+        <Route path="/scifi-image" element={<PrivateRoute element={<ScifiImages />} />} />
 
       </Routes>
       </ThemeProvider>  
