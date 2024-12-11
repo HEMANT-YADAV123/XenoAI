@@ -63,7 +63,7 @@ const Register = () => {
           </Typography>
 
           <TextField 
-          label="username" 
+          label="username atleast 5 characters" 
           required
           margin='normal' 
           fullWidth  
@@ -72,7 +72,7 @@ const Register = () => {
           >
           </TextField>
           <TextField 
-          label="email" 
+          label="enter a valid email" 
           type='email'
           required
           margin='normal' 
@@ -82,7 +82,7 @@ const Register = () => {
           >
           </TextField>
           <TextField 
-          label="password" 
+          label="password atleast 8 characters" 
           type='password'
           required
           margin='normal' 

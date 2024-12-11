@@ -57,7 +57,7 @@ const Login = () => {
           </Typography>
 
           <TextField 
-          label="email" 
+          label="enter a valid email" 
           type='email'
           required
           margin='normal' 
@@ -67,7 +67,7 @@ const Login = () => {
           >
           </TextField>
           <TextField 
-          label="password" 
+          label="password at least 8 characters" 
           type='password'
           required
           margin='normal' 
