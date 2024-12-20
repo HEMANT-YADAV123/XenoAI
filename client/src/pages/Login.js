@@ -67,7 +67,7 @@ const Login = () => {
           >
           </TextField>
           <TextField 
-          label="password at least 8 characters" 
+          label="password at least 6 characters" 
           type='password'
           required
           margin='normal' 

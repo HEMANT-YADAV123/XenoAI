@@ -1,6 +1,6 @@
 import './App.css';
 import {Routes,Route} from 'react-router-dom';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { CssBaseline, ThemeProvider} from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import { themeSettings } from './theme';
@@ -21,6 +21,9 @@ import ScifiImages from './pages/ScifiImages';
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings(),[]));
+  useEffect(() => {
+    document.title = "XenoAI"; // Set your desired title here
+  }, []);
   return (
     <>
     <ThemeProvider theme={theme}>

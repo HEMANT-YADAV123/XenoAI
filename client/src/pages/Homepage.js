@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import DescriptionRounded from '@mui/icons-material/DescriptionRounded';
 import FormatAlignLeftOutlined from '@mui/icons-material/FormatAlignLeftOutlined';
 import ChatRounded from '@mui/icons-material/ChatRounded';
+import ImageRounded from '@mui/icons-material/ImageRounded';
+import CodeRounded from '@mui/icons-material/CodeRounded';
 
 const Homepage = () => {
   const navigate = useNavigate();
 
   return (
     <>
-    <Box sx={{display:'flex' , flexDirection:'row', justifyContent:'space-evenly'}}>
+    <Box sx={{display:'flex' ,flexWrap: 'wrap', flexDirection:'row', justifyContent:'space-evenly',overflowY: 'auto',minHeight: '100vh',}}>
 
         {/*Summarize Text */}
         <Box p={2}>
@@ -18,7 +20,10 @@ const Homepage = () => {
             Summarize Text
           </Typography>
           <Card onClick={()=>navigate('/summary')}
-            sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"}}}
+            sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"},'@media (max-width:600px)': {
+            width: '300px', // Cards will take full width on small screens
+            height: 'auto', // Let the height adjust automatically on small screens
+            }}}
             >
               <DescriptionRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
               <Stack p={3} pt={0}>
@@ -40,7 +45,10 @@ const Homepage = () => {
               Text-Generation
             </Typography>
             <Card onClick={()=>navigate('/text-generation')}
-              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"}}}
+              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"},'@media (max-width:600px)': {
+              width: '300px', // Cards will take full width on small screens
+              height: 'auto', // Let the height adjust automatically on small screens
+              }}}
               >
                 <FormatAlignLeftOutlined sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
                 <Stack p={3} pt={0}>
@@ -61,7 +69,10 @@ const Homepage = () => {
               AI ChatBot
             </Typography>
             <Card onClick={()=>navigate('/chatbot')}
-              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"}}}
+              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"},'@media (max-width:600px)': {
+              width: '300px', // Cards will take full width on small screens
+              height: 'auto', // Let the height adjust automatically on small screens
+              }}}
               >
                 <ChatRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
                 <Stack p={3} pt={0}>
@@ -81,9 +92,12 @@ const Homepage = () => {
               JavaScript Converter
             </Typography>
             <Card onClick={()=>navigate('/js-converter')}
-              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"}}}
+              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"},'@media (max-width:600px)': {
+              width: '300px', // Cards will take full width on small screens
+              height: 'auto', // Let the height adjust automatically on small screens
+              }}}
               >
-                <ChatRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
+                <CodeRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
                 <Stack p={3} pt={0}>
                     <Typography fontWeight="bold" variant='h5'>
                         JS CONVERTER
@@ -101,9 +115,12 @@ const Homepage = () => {
               AI SCIFI Images
             </Typography>
             <Card onClick={()=>navigate('/scifi-image')}
-              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"}}}
+              sx= {{boxShadow: 2, borderRadius: 5,height: 190, width:200, '&:hover':{border:2, boxShadow:0, borderColor:"primary.dark", cursor:"pointer"},'@media (max-width:600px)': {
+              width: '300px', // Cards will take full width on small screens
+              height: 'auto', // Let the height adjust automatically on small screens
+              }}}
               >
-                <ChatRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
+                <ImageRounded sx={{fontSize:80,color:'primary.main', mt:2 , ml:2}}/>
                 <Stack p={3} pt={0}>
                     <Typography fontWeight="bold" variant='h5'>
                         SCIFI Image

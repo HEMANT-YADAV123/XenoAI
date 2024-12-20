@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required:true,
         select: true,// To enhance security by ensuring sensitive data (e.g., passwords) is not included in query results unintentionally in mongodb.
-        minlength: [6,'name mus6t be at least  char']
+        minlength: [6,'name must be at least 6 char']
     },
     customerId:{
         type:String,
@@ -70,7 +70,7 @@ userSchema.pre('save',async function(next){
 //userSchema.methods.matchPassword defines a method called matchPassword on the userSchema (Mongoose schema). It means that this method can be called on any instance of the model (like a specific user document) to check if the password provided matches the one stored in the database.
 userSchema.methods.matchPassword = async function(password) {
     console.log("Password from user input:", password); // Check the input password
-    console.log("Hashed password from DB:", this.password); // Check the stored hashed                      password           
+    console.log("Hashed password from DB:", this.password); // Check the stored hashed password           
     
     if(!password || !this.password)
     {

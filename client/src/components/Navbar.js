@@ -35,7 +35,7 @@ const Navbar = () => {
         color={"primary"} 
         fontWeight={"bold"}
         >
-                AI GPT5 CLONE
+                XenoAI
         </Typography>
         {
           loggedIn ? (

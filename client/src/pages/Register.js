@@ -82,7 +82,7 @@ const Register = () => {
           >
           </TextField>
           <TextField 
-          label="password atleast 8 characters" 
+          label="password atleast 6 characters" 
           type='password'
           required
           margin='normal' 

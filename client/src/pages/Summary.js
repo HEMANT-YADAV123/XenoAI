@@ -30,7 +30,7 @@ const Summary = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   //media
-  const isNotMobile = useMediaQuery("(min-width: 1000px)");
+  const isNotMobile = useMediaQuery("(min-width: 600px)");
   // states
   const [text, settext] = useState("");
   const [summary, setSummary] = useState("");
