@@ -42,7 +42,7 @@ const ScifiImages = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/v1/hugging/scifi-image",{text});
+      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/scifi-image",{text});
       console.log(data);
       if (data.success) {
         setImage(data.image || "No summary generated.");

@@ -10,7 +10,7 @@ const Navbar = () => {
     //handle logout.
     const handleLogout = async()=>{
         try {
-          await axios.post('/api/v1/auth/logout');//call the backend logout controller.
+          await axios.post('https://xenoai-backend.onrender.com/api/v1/auth/logout');//call the backend logout controller.
           //clear the token from localstorage.
           localStorage.removeItem("authToken")
           //give notification

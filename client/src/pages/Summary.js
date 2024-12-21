@@ -41,7 +41,7 @@ const Summary = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/v1/hugging/summary",{text});
+      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/summary",{text});
       console.log(data);
       if (data.success) {
         setSummary(data.summary || "No summary generated.");

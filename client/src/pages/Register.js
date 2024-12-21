@@ -21,7 +21,7 @@ const Register = () => {
   const handleSubmit = async(e)=>{
       e.preventDefault();
       try {
-        await axios.post('/api/v1/auth/register',{username,email,password});
+        await axios.post('https://xenoai-backend.onrender.com/api/v1/auth/register',{username,email,password});
         //if data is done successfully then set success notification.
         toast.success('User Registered Successfully');
         //then we naviagte user to login page.

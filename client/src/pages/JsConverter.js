@@ -43,7 +43,7 @@ const JsConverter = () => {
     setLoading(true); // Set loading to true
     try {
       // Send the English text to the backend API for conversion to JS code
-      const { data } = await axios.post("/api/v1/hugging/js-converter", { text });
+      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/js-converter", { text });
       console.log(data);
       
       // Check if the backend response is successful

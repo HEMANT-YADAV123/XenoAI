@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = async(e)=>{
       e.preventDefault();
       try {
-        const response = await axios.post('/api/v1/auth/login', { email, password });
+        const response = await axios.post('https://xenoai-backend.onrender.com/api/v1/auth/login', { email, password });
         const token = response.data.token;
         toast.success('Login Successfully');
         localStorage.setItem("authToken",token)

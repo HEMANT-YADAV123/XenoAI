@@ -41,7 +41,7 @@ const Paragraph = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("/api/v1/hugging/generate-text", { question: text });
+      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/generate-text", { question: text });
 
      // Check if the result is available
      if (data && data.result && data.result.parts && data.result.parts.length > 0) {

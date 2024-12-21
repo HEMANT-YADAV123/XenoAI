@@ -43,7 +43,7 @@ const ChatBot = () => {
     e.preventDefault();
     setLoading(true); // Set loading to true
     try {
-      const { data } = await axios.post("/api/v1/hugging/chatbot",{text , style});
+      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/chatbot",{text , style});
       console.log(data);
       if (data.success) {
         setresponse(data.chatbotResponse || "No response available.");
