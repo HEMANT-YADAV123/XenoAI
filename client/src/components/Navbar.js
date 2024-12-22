@@ -1,8 +1,9 @@
 import React from 'react'
-import {Box,Typography,useTheme,Link} from '@mui/material';
+import {Box,Typography,useTheme} from '@mui/material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
+
 const Navbar = () => {
     const theme = useTheme();
     const loggedIn = localStorage.getItem("authToken");//if authToken is present means we have login.
@@ -40,23 +41,23 @@ const Navbar = () => {
         {
           loggedIn ? (
           <>
-              <Link href="/" p={1}>
+              <NavLink to="/" p={1}>
                 Home
-              </Link>
-              <Link href="/login" onClick={handleLogout} p={1}>
+              </NavLink>
+              <NavLink to="/login" onClick={handleLogout} p={1}>
                 Logout
-              </Link>
+              </NavLink>
           </>  
         ) 
           : 
           (
             <>
-            <Link href="/register" p={1}>
+            <NavLink to="/register" p={1}>
                 Sign Up
-            </Link>
-            <Link href="/login" p={1}>
+            </NavLink>
+            <NavLink to="/login" p={1}>
                 Sign In
-            </Link>
+            </NavLink>
             </>
           )
         }
