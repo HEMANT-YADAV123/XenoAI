@@ -32,11 +32,21 @@ const Login = () => {
       }
       try {
         const response = await axios.post('https://xenoai-backend.onrender.com/api/v1/auth/login', { email, password });
-        const token = response.data.token;
-        toast.success('Login Successfully');
-        localStorage.setItem("authToken",token)
-        //then we naviagte user to login page.
-        navigate('/');
+
+        if (response.data.success && response.data.token) 
+        {
+          const token = response.data.token;
+
+          // Save the token and show success message
+          localStorage.setItem("authToken", token);
+          toast.success('Login Successful');
+
+          // Redirect to the home page or dashboard
+          navigate('/');
+        }
+        else {
+          toast.error('Unexpected response format');
+        }
         } catch (err) {
           console.log(err);
 

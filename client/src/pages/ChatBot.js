@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {
   Box,
@@ -9,8 +10,6 @@ import {
   useMediaQuery,
   TextField,
   Button,
-  Alert,
-  Collapse,
   Card,
   CircularProgress, // Import CircularProgress
 } from "@mui/material";
@@ -28,14 +27,12 @@ axios.interceptors.request.use(
 );
 const ChatBot = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [style, setStyle] = useState("yoda"); // Default chatbot style
   const [response, setresponse] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // Loading state
 
   //register ctrl
@@ -48,18 +45,16 @@ const ChatBot = () => {
       if (data.success) {
         setresponse(data.chatbotResponse || "No response available.");
       } else {
-        setError(data.message || "Error generating message.");
+        toast.error(data.message || "Error generating message.");
       }
     } catch (err) {
-      console.log(error);
+      console.log(err);
       if (err.response.data?.error) {
-        setError(err.response.data.error);
+        toast.error(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        toast.error(err.message);
       }
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+    
     }
     finally {
       setLoading(false); // Set loading to false
@@ -74,11 +69,7 @@ const ChatBot = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      <Collapse in={error}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Collapse>
+      
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">Ask the ChatBot</Typography>
 
@@ -182,6 +173,7 @@ const ChatBot = () => {
           </Typography>
         </Card>
       )}
+      <ToastContainer/>
     </Box>
   );
 };

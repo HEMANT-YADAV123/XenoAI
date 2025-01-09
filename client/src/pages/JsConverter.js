@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {
   Box,
@@ -9,8 +10,6 @@ import {
   useMediaQuery,
   TextField,
   Button,
-  Alert,
-  Collapse,
   Card,
   CircularProgress,
 } from "@mui/material";
@@ -28,13 +27,11 @@ axios.interceptors.request.use(
 );
 const JsConverter = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [code, setcode] = useState("");
-  const [error, setError] = useState("");
   const [loading,setLoading] = useState(false)//loading state.
 
   // Handle submit
@@ -50,22 +47,20 @@ const JsConverter = () => {
       if (data.success) {
         setcode(data.jsCode || "No JavaScript code generated.");
       } else {
-        setError(data.message || "Error generating JavaScript code.");
+        toast.error(data.message || "Error generating JavaScript code.");
       }
     } catch (err) {
-      console.log(error);
+      console.log(err);
       
       // Handle different types of errors
       if (err.response?.data?.error) {
-        setError(err.response.data.error);
+        toast.error(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        toast.error(err.message);
       }
       
       // Reset the error after 5 seconds
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+    
     }
     finally{
       setLoading(false);
@@ -81,12 +76,6 @@ const JsConverter = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      {/* Error Alert */}
-      <Collapse in={error}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Collapse>
 
       {/* Form to input English text */}
       <form onSubmit={handleSubmit}>
@@ -183,6 +172,7 @@ const JsConverter = () => {
           </Typography>
         </Card>
       )}
+      <ToastContainer/>
     </Box>
   );
 };

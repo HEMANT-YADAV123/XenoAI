@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {
   Box,
@@ -9,8 +10,6 @@ import {
   useMediaQuery,
   TextField,
   Button,
-  Alert,
-  Collapse,
   Card,
   CircularProgress,
 } from "@mui/material";
@@ -28,13 +27,11 @@ axios.interceptors.request.use(
 );
 const Summary = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 600px)");
   // states
   const [text, settext] = useState("");
   const [summary, setSummary] = useState("");
-  const [error, setError] = useState("");
   const [loading,setLoading] = useState(false);
   //register ctrl
   const handleSubmit = async (e) => {
@@ -46,18 +43,15 @@ const Summary = () => {
       if (data.success) {
         setSummary(data.summary || "No summary generated.");
       } else {
-        setError(data.message || "Error generating summary.");
+        toast.error(data.message || "Error generating summary.");
       }
     } catch (err) {
-      console.log(error);
+      console.log(err);
       if (err.response.data?.error) {
-        setError(err.response.data.error);
+        toast.error(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        toast.error(err.message);
       }
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
     finally{
       setLoading(false);
@@ -72,11 +66,7 @@ const Summary = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      <Collapse in={error}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Collapse>
+  
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">Summarize Text</Typography>
 
@@ -166,6 +156,8 @@ const Summary = () => {
           </Typography>
         </Card>
       )}
+
+      <ToastContainer/>
     </Box>
   );
 };

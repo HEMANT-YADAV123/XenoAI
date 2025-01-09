@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import {
   Box,
@@ -9,8 +10,6 @@ import {
   useMediaQuery,
   TextField,
   Button,
-  Alert,
-  Collapse,
   Card,
   CircularProgress,
 } from "@mui/material";
@@ -28,13 +27,11 @@ axios.interceptors.request.use(
 );
 const ScifiImages = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
-  //media
+  //media query
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [image, setImage] = useState("");
-  const [error, setError] = useState("");
   const [loading,setLoading] = useState(false);
 
   //register ctrl
@@ -47,18 +44,15 @@ const ScifiImages = () => {
       if (data.success) {
         setImage(data.image || "No summary generated.");
       } else {
-        setError(data.message || "Error generating summary.");
+        toast.error(data.message || "Error generating summary.");
       }
     } catch (err) {
-      console.log(error);
+      console.log(err);
       if (err.response.data?.error) {
-        setError(err.response.data.error);
+        toast.error(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        toast.error(err.message);
       }
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
     finally{
       setLoading(false);
@@ -73,11 +67,7 @@ const ScifiImages = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      <Collapse in={Boolean(error)}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Collapse>
+  
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">SCIFI Image</Typography>
 
@@ -177,6 +167,7 @@ const ScifiImages = () => {
           </Typography>
         </Card>
       )}
+      <ToastContainer/>
     </Box>
   );
 };

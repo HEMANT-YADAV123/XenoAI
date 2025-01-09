@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Box,
   Typography,
@@ -8,8 +10,6 @@ import {
   useMediaQuery,
   TextField,
   Button,
-  Alert,
-  Collapse,
   Card,
   CircularProgress,
 } from "@mui/material";
@@ -27,13 +27,11 @@ axios.interceptors.request.use(
 );
 const Paragraph = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [para, setPara] = useState("");
-  const [error, setError] = useState("");
   const [loading,setLoading] = useState(false);
 
   //register ctrl
@@ -48,18 +46,15 @@ const Paragraph = () => {
       const textContent = data.result.parts[0].text;  // Access the text inside the first part
       setPara(textContent);  // Set the generated text
     } else {
-      setError("No content generated");
+      toast.error("No content generated");
     }
     } catch (err) {
-      console.log(error);
+      console.log(err);
       if (err.response?.data?.error) {
-        setError(err.response.data.error);
+        toast.error(err.response.data.error);
       } else if (err.message) {
-        setError(err.message);
+        toast.error(err.message);
       }
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
     finally{
       setLoading(false);
@@ -74,11 +69,7 @@ const Paragraph = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-      <Collapse in={error}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      </Collapse>
+    
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">Generate Paragraph</Typography>
 
@@ -170,6 +161,7 @@ const Paragraph = () => {
           </Typography>
         </Card>
       )}
+      <ToastContainer/>
     </Box>
   );
 };
