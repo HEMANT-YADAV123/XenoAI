@@ -30,13 +30,13 @@ app.use(cors());
 app.use(express.json());//a middleware in Express that helps your app understand JSON data coming in from client requests.
 app.use(bodyParser.urlencoded({extended:false})) //It helps your Express app read data sent from an HTML form (like a login form) so you can easily access it in your code.
 app.use(morgan('dev'))// This tool logs requests to the console so you can see what’s happening on your server.
-app.use(errorHandler);//to handle error and send response message and status code.
+
 const PORT = process.env.PORT || 8081
 
 //API routes.
 app.use('/api/v1/auth',authroutes);
 app.use("/api/v1/hugging", authMiddleware.protect, openaiRoutes);
-
+app.use(errorHandler);//to handle error and send response message and status code.
 
 app.listen(PORT,()=>{
     console.log(`server running in ${process.env.DEV_MODE} on ${PORT}`.bgCyan.white);
