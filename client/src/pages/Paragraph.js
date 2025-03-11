@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import {
   Box,
   Typography,
@@ -17,7 +19,7 @@ import {
 // Set up Axios interceptor
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,27 +29,55 @@ axios.interceptors.request.use(
 );
 const Paragraph = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [para, setPara] = useState("");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/generate-text", { question: text });
+    
+    // Get token from localStorage
+    const token = localStorage.getItem("authToken");
 
-     // Check if the result is available
-     if (data && data.result && data.result.parts && data.result.parts.length > 0) {
-      const textContent = data.result.parts[0].text;  // Access the text inside the first part
-      setPara(textContent);  // Set the generated text
+    // Check if token exists and is expired
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < Date.now()) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("authToken");
+        navigate("/login"); // Redirect to login page
+        return;
+      }
     } else {
-      toast.error("No content generated");
+      toast.error("No authentication token found. Please log in.");
+      navigate("/login");
+      return;
     }
+    //if token is valid make request.
+    try {
+      const { data } = await axios.post(
+        "https://xenoai-backend.onrender.com/api/v1/hugging/generate-text",
+        { question: text }
+      );
+
+      // Check if the result is available
+      if (
+        data &&
+        data.result &&
+        data.result.parts &&
+        data.result.parts.length > 0
+      ) {
+        const textContent = data.result.parts[0].text; // Access the text inside the first part
+        setPara(textContent); // Set the generated text
+      } else {
+        toast.error("No content generated");
+      }
     } catch (err) {
       console.log(err);
       if (err.response?.data?.error) {
@@ -55,8 +85,7 @@ const Paragraph = () => {
       } else if (err.message) {
         toast.error(err.message);
       }
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -69,7 +98,6 @@ const Paragraph = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-    
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">Generate Paragraph</Typography>
 
@@ -92,34 +120,38 @@ const Paragraph = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
-          disabled={loading}//disable button while loading.
+          disabled={loading} //disable button while loading.
         >
-          {loading ? <CircularProgress size={"24px"} sx={{ color: "white" }}/> : "Generate"}
+          {loading ? (
+            <CircularProgress size={"24px"} sx={{ color: "white" }} />
+          ) : (
+            "Generate"
+          )}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {loading ?
+      {loading ? (
         <Card
-        sx={{
-          mt: 4,
-          border: 1,
-          boxShadow: 0,
-          height: "500px",
-          maxHeight: "500px", // Ensures the height doesn't exceed 500px
-          borderRadius: 5,
-          borderColor: "natural.medium",
-          bgcolor: "background.default",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center" 
-        }}
-      >
-        <CircularProgress/>
-      </Card>
-      : para ? (
+          sx={{
+            mt: 4,
+            border: 1,
+            boxShadow: 0,
+            height: "500px",
+            maxHeight: "500px", // Ensures the height doesn't exceed 500px
+            borderRadius: 5,
+            borderColor: "natural.medium",
+            bgcolor: "background.default",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Card>
+      ) : para ? (
         <Card
           sx={{
             mt: 4,
@@ -161,7 +193,7 @@ const Paragraph = () => {
           </Typography>
         </Card>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </Box>
   );
 };

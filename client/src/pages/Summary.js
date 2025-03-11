@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -17,7 +19,7 @@ import {
 // Set up Axios interceptor
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,18 +29,41 @@ axios.interceptors.request.use(
 );
 const Summary = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   //media
   const isNotMobile = useMediaQuery("(min-width: 600px)");
   // states
   const [text, settext] = useState("");
   const [summary, setSummary] = useState("");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // Get token from localStorage
+    const token = localStorage.getItem("authToken");
+
+    // Check if token exists and is expired
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < Date.now()) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("authToken");
+        navigate("/login"); // Redirect to login page
+        return;
+      }
+    } else {
+      toast.error("No authentication token found. Please log in.");
+      navigate("/login");
+      return;
+    }
+    //if token is valid make request.
     try {
-      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/summary",{text});
+      const { data } = await axios.post(
+        "https://xenoai-backend.onrender.com/api/v1/hugging/summary",
+        { text }
+      );
       console.log(data);
       if (data.success) {
         setSummary(data.summary || "No summary generated.");
@@ -52,8 +77,7 @@ const Summary = () => {
       } else if (err.message) {
         toast.error(err.message);
       }
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -66,7 +90,6 @@ const Summary = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-  
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">Summarize Text</Typography>
 
@@ -89,33 +112,37 @@ const Summary = () => {
           variant="contained"
           size="large"
           sx={{ color: "white", mt: 2 }}
-          disabled={loading}//disable button while loading
+          disabled={loading} //disable button while loading
         >
-          {loading ? <CircularProgress size={24} sx={{color: "white"}} /> : "Submit"}
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Submit"
+          )}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {loading ?
+      {loading ? (
         <Card
-        sx={{
-          mt: 4,
-          border: 1,
-          boxShadow: 0,
-          height: "500px",
-          borderRadius: 5,
-          borderColor: "natural.medium",
-          bgcolor: "background.default",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <CircularProgress/>
-      </Card>
-      : summary ? (
+          sx={{
+            mt: 4,
+            border: 1,
+            boxShadow: 0,
+            height: "500px",
+            borderRadius: 5,
+            borderColor: "natural.medium",
+            bgcolor: "background.default",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Card>
+      ) : summary ? (
         <Card
           sx={{
             mt: 4,
@@ -157,7 +184,7 @@ const Summary = () => {
         </Card>
       )}
 
-      <ToastContainer/>
+      <ToastContainer />
     </Box>
   );
 };

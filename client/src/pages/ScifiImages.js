@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import {
   Box,
   Typography,
@@ -17,7 +19,7 @@ import {
 // Set up Axios interceptor
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,19 +29,41 @@ axios.interceptors.request.use(
 );
 const ScifiImages = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   //media query
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
   const [image, setImage] = useState("");
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //register ctrl
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // Get token from localStorage
+    const token = localStorage.getItem("authToken");
+
+    // Check if token exists and is expired
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 1000 < Date.now()) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("authToken");
+        navigate("/login"); // Redirect to login page
+        return;
+      }
+    } else {
+      toast.error("No authentication token found. Please log in.");
+      navigate("/login");
+      return;
+    }
+    //if token is valid make request.
     try {
-      const { data } = await axios.post("https://xenoai-backend.onrender.com/api/v1/hugging/scifi-image",{text});
+      const { data } = await axios.post(
+        "https://xenoai-backend.onrender.com/api/v1/hugging/scifi-image",
+        { text }
+      );
       console.log(data);
       if (data.success) {
         setImage(data.image || "No summary generated.");
@@ -53,8 +77,7 @@ const ScifiImages = () => {
       } else if (err.message) {
         toast.error(err.message);
       }
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -67,7 +90,6 @@ const ScifiImages = () => {
       sx={{ boxShadow: 5 }}
       backgroundColor={theme.palette.background.alt}
     >
-  
       <form onSubmit={handleSubmit}>
         <Typography variant="h3">SCIFI Image</Typography>
 
@@ -92,35 +114,37 @@ const ScifiImages = () => {
           sx={{ color: "white", mt: 2 }}
           disabled={loading}
         >
-          {loading ? <CircularProgress size={24} sx={{color:"white"}}/> : "Generate"}
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Generate"
+          )}
         </Button>
         <Typography mt={2}>
           not this tool ? <Link to="/">GO BACK</Link>
         </Typography>
       </form>
 
-      {loading ?
-      <Card
-      sx={{
-        mt: 4,
-        border: 1,
-        boxShadow: 0,
-        height: "500px",
-        borderRadius: 5,
-        borderColor: "natural.medium",
-        bgcolor: "background.default",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
-    >
-      <CircularProgress/>
-    </Card>
-    :
-     image ? (
+      {loading ? (
         <Card
           sx={{
-            
+            mt: 4,
+            border: 1,
+            boxShadow: 0,
+            height: "500px",
+            borderRadius: 5,
+            borderColor: "natural.medium",
+            bgcolor: "background.default",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Card>
+      ) : image ? (
+        <Card
+          sx={{
             border: 1,
             boxShadow: 0,
             height: "500px",
@@ -129,15 +153,22 @@ const ScifiImages = () => {
             bgcolor: "background.default",
           }}
         >
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
             <img
               src={image}
               alt="scifi-image"
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                borderRadius: '5px',
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "5px",
               }}
             />
           </Box>
@@ -167,7 +198,7 @@ const ScifiImages = () => {
           </Typography>
         </Card>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </Box>
   );
 };
