@@ -39,7 +39,10 @@ const Register = () => {
         //if data is done successfully then set success notification.
         toast.success('User Registered Successfully');
         //then we naviagte user to login page.
-        navigate('/login');
+        setTimeout(()=>{
+          navigate('/login')
+        },1000)
+        
 
       } catch (err) {
           console.log(err);

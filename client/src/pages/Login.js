@@ -42,7 +42,10 @@ const Login = () => {
           toast.success('Login Successful');
 
           // Redirect to the home page or dashboard
-          navigate('/');
+          
+          setTimeout(()=>{
+            navigate('/');
+          },1000)
         }
         else {
           toast.error('Unexpected response format');

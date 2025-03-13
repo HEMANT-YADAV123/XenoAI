@@ -34,9 +34,9 @@ const ChatBot = () => {
   const isNotMobile = useMediaQuery("(min-width: 1000px)");
   // states
   const [text, settext] = useState("");
-  const [style, setStyle] = useState("yoda"); // Default chatbot style
+  const [style, setStyle] = useState("yoda"); // Default chatbot style.
   const [response, setresponse] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false); // Loading state.
 
   //register ctrl
   const handleSubmit = async (e) => {
@@ -51,7 +51,7 @@ const ChatBot = () => {
       if (decodedToken.exp * 1000 < Date.now()) {
         toast.error("Session expired. Please log in again.");
         localStorage.removeItem("authToken");
-        navigate("/login"); // Redirect to login page
+        navigate("/login"); // Redirect to login page.
         return;
       }
     } else {

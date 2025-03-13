@@ -6,7 +6,7 @@ import {NavLink, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
     const theme = useTheme();
-    const loggedIn = localStorage.getItem("authToken");//if authToken is present means we have login.
+    const loggedIn = localStorage.getItem("authToken");//if authToken is present means are loggedIn.
     const navigate = useNavigate();
     //handle logout.
     const handleLogout = async()=>{
@@ -17,7 +17,10 @@ const Navbar = () => {
           //give notification
           toast.success('Logged Out Successfully');
           //redirect it to login page.
-          navigate('/login');
+          setTimeout(()=>{
+            navigate('/login')
+          },1000)
+          
         } catch (error) {
           console.log(error);
           
@@ -44,7 +47,7 @@ const Navbar = () => {
               <NavLink to="/" p={1}>
                 Home
               </NavLink>
-              <NavLink to="/login" onClick={handleLogout} p={1}>
+              <NavLink onClick={handleLogout} p={1}>
                 Logout
               </NavLink>
           </>  
