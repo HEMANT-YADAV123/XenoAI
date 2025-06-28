@@ -10,8 +10,8 @@ const Login = () => {
   const theme = useTheme();//to use the theme in from material ui.
   const navigate = useNavigate();
   //states
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const [email,setEmail] = useState("hemant@gmail.com");
+  const [password,setPassword] = useState("Hemant@1");
 
   //media query
   const isNotMobile = useMediaQuery("(min-width: 1000px)")
